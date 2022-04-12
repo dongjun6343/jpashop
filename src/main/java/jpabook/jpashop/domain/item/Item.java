@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
+// 상속 관계를 매핑하기 위해 Inheritance 어노테이션 사용
+// InheritanceType.SINGLE_TABLE을 선택해서 단일 테이블 전략 선택
 // SINGLE_TABLE : 한 테이블에 다 있다.
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+// 단일 테이블은 구분 컬럼을 필수로 사용
 @DiscriminatorColumn(name = "dtype")
 @Getter @Setter
 public abstract class Item {
