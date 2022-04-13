@@ -18,16 +18,16 @@ public class Order {
     private Long id;
 
     // 다대일
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     // 연관관계 주인을 정해줘야 함! (중요)
     // 외래키가 있는 쪽이 주인.
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
@@ -35,4 +35,22 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // 주문상태
+
+    // (양방향 연관관계)
+    //==연관관계 메서드==//
+    // 핵심적으로 컨트롤 할 수 있는 곳에 위치하는게 좋다.
+    public void setMember(Member member){
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    public void addOrderItems(OrderItem orderItem){
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void setDelivery(Delivery delivery){
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
 }

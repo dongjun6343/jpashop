@@ -17,7 +17,7 @@ public class Category {
     private Long id;
 
     private String name;
-    
+
     // ManyToMany는 실무에서는 쓰기 힘들다. why? 중간에 추가되는 부분이 많기 때문에
     @ManyToMany
     // 중간테이블 매핑을 위해서 조인을 해줘야 함.
@@ -28,7 +28,7 @@ public class Category {
     )
     private List<Item> items = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     // 부모는 한개
     private Category parent;
@@ -37,6 +37,11 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     // 자식은 여러 개
     private List<Category> child = new ArrayList<>();
+
+    public void addChildCategory(Category child){
+        this.child.add(child);
+        child.setParent(this);
+    }
 }
 
 
