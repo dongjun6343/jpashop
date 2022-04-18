@@ -32,7 +32,7 @@ public abstract class Item {
     private List<Category> categories = new ArrayList<>();
 
     // == 비즈니스 로직 == //
-
+    // Setter를 만들지 않고 재고증가, 감소처럼 만들어줘야 한다.( 가장 객체지향적인 방법 )
     /**
      * 재고 증가
      * @param quantity
@@ -41,6 +41,10 @@ public abstract class Item {
         this.stockQuantity += quantity;
     }
 
+    /**
+     * 재고 감소
+     * @param quantity
+     */
     public void removeStock(int quantity){
         int restStock = this.stockQuantity - quantity;
         if (restStock < 0 ) {
