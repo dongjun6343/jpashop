@@ -21,5 +21,6 @@ public class OrderRepository {
     }
 
     // 검색 : 파라미터 값이 넘어가야함.
+    // 동적쿼리 ==> Querydsl로 처리.
 //    public List<Order> findAll(OrderSearch orderSearch){}
 }
