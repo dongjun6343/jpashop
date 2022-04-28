@@ -6,6 +6,7 @@ import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -27,7 +28,16 @@ public class MemberController {
     // 등록
     @PostMapping("members/new")
     // @Valid : MemberForm에서 Validation.
-    public String create(@Valid MemberForm form){
+    // BindingResult : 오류가 담겨서 실행됨.
+    // MemberForm : 실무에서는 폼화면이 단순하지 않으므로 멤버엔터티를 파라미터로 받아서 하기에는 힘들다.
+    //                  ==> 그래서 MemberForm을 새로 만들어서 파라미터로 넘김.
+    public String create(@Valid MemberForm form, BindingResult result){
+
+        // 에러가 있으면 다시 멤버 생성화면으로 보냄.
+        if ( result.hasErrors()){
+            return "members/createMemberForm";
+        }
+
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
         Member member = new Member();
