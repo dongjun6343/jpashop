@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     // 등록
-    @PostMapping("members/new")
+    @PostMapping("/members/new")
     // @Valid : MemberForm에서 Validation.
     // BindingResult : 오류가 담겨서 실행됨.
     // MemberForm : 실무에서는 폼화면이 단순하지 않으므로 멤버엔터티를 파라미터로 받아서 하기에는 힘들다.

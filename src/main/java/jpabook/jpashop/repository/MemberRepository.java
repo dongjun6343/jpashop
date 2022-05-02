@@ -29,7 +29,7 @@ public class MemberRepository {
     // JPQL
     public List<Member> findAll(){
         // ctrl + alt + n
-        return em.createQuery("select m from member m", Member.class).getResultList();
+        return em.createQuery("select m from Member m", Member.class).getResultList();
     }
 
     // :name ==> 파라미터 바인딩.
