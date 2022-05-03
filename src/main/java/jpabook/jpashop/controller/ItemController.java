@@ -52,6 +52,7 @@ public class ItemController {
         BookForm form = new BookForm();
         form.setId(item.getId());
         form.setName(item.getName());
+        form.setPrice(item.getPrice());
         form.setStockQuantity(item.getStockQuantity());
         form.setAuthor(item.getAuthor());
         form.setIsbn(item.getIsbn());
