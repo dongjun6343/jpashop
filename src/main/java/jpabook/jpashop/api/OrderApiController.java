@@ -51,6 +51,7 @@ public class OrderApiController {
                                                                   @RequestParam(value = "limit" , defaultValue = "100") int limit){
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
         List<OrderDto> result = orders.stream()
+                // OrderDto - 생성자로 넘김.
                 .map(o -> new OrderDto(o))
                 .collect(Collectors.toList());
 
@@ -64,6 +65,8 @@ public class OrderApiController {
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
+        // entity를 노출하면 안된다. 엔티티가 변경되면 api 스펙이 다 변경되므로
+        // private List<OrderItem> orderItems; => OrderItemDto로 변경한다.
         private List<OrderItemDto> orderItems;
 
         public OrderDto(Order order){
