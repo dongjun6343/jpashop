@@ -65,12 +65,35 @@ public class OrderRepository {
 
     // fetch join은 JPA를 쓰려면 100% 이해를 해야함.
     // 패치 조인을 사용해서 쿼리 1번에 조회함.
+    // 쿼리가 조금만 더 복잡해지면 QueryDSL을 주로 사용함.
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
                 "select o from Order o" +
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
+    }
+
+    // distinct : db의 distinct 는 모두 동일해야 중복이 제거가 가능.
+    // jpa에서는 자체적으로 distinct가 있으면 Order가 같은 아이디 값이면 중복을 제거함.
+
+    // distinct 1) db에 distinct 날려줌.
+    //          2) Root (= Order) 값 중복제거.
+    //  결과적으로 페치 조인으로 SQL 1번만 실행됨. (성공)
+
+    //  하지만 단점이 있다!!! --> 페이징이 불가능함.
+    //              1대다를 페치조인을 하는 순간 페이징이 불가능해진다..! (중요)
+    //              하이버네이트에서 메모리 에러가 나옴.
+    public List<Order> findAllWtihItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i" , Order.class
+        ).setFirstResult(1)
+         .setMaxResults(100)
+         .getResultList();
     }
 
     public List<Order> findAllWithMemberDelivery(int offset, int limit) {
