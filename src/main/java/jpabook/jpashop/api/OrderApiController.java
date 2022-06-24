@@ -55,11 +55,15 @@ public class OrderApiController {
         return result;
     }
 
-
-    @GetMapping("/api/v3.1/simple-orders")
+    /*
+     * 1. ToOne 관계는 페치조인을 건다. (페이징에 영향을 안주기 때문에)
+     * 2. 컬렉션은 지연 로딩으로 조회
+     * 3. 지연 로딩 최적화 - hibernate:default_batch_fetch_size (yml파일에 추가) , @BatchSize
+     */
+    @GetMapping("/api/v3.1/orders")
     public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
                                                                   @RequestParam(value = "limit" , defaultValue = "100") int limit){
-        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
         List<OrderDto> result = orders.stream()
                 // OrderDto - 생성자로 넘김.
                 .map(o -> new OrderDto(o))
