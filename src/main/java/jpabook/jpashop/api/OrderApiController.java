@@ -6,7 +6,10 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderQueryDto;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
 
     // api 엔티티 직접 노출이므로 위험!
@@ -59,6 +63,10 @@ public class OrderApiController {
      * 1. ToOne 관계는 페치조인을 건다. (페이징에 영향을 안주기 때문에)
      * 2. 컬렉션은 지연 로딩으로 조회
      * 3. 지연 로딩 최적화 - hibernate:default_batch_fetch_size (yml파일에 추가) , @BatchSize
+     *
+     * 쿼리 호출 수가 1 + N -> 1 + 1 로 최적화된다.
+     * 컬렉션 페치 조인은 페이징이 불가능하지만 이 방법은 페이징이 가능하다.
+     * default_batch_fetch_size는 100 ~ 1000개가 최적화.
      */
     @GetMapping("/api/v3.1/orders")
     public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
@@ -72,7 +80,12 @@ public class OrderApiController {
         return result;
     }
 
-    @Data
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> orderV4(){
+        return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    @Getter
     static class OrderDto {
         private Long orderId;
         private String name;
