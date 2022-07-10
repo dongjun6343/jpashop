@@ -3,12 +3,18 @@ package jpabook.jpashop.repository.order.query;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.OrderStatus;
 import lombok.Data;
+<<<<<<< HEAD
 import lombok.EqualsAndHashCode;
+=======
+>>>>>>> origin/master
 
 import java.time.LocalDateTime;
 
 @Data
+<<<<<<< HEAD
 @EqualsAndHashCode(of = "orderId")
+=======
+>>>>>>> origin/master
 public class OrderFlatDto {
     private Long orderId;
     private String name;
