@@ -33,7 +33,7 @@ public class OrderService {
 
         // 엔터티 조회
         // ctrl + alt + v
-        Member member =  memberRepository.findOne(memberId);
+        Member member =  memberRepository.findById(memberId).get();
         Item item = itemRepository.findOne(itemId);
 
         // 배송정보 생성
@@ -70,6 +70,7 @@ public class OrderService {
 
     // 검색
     public List<Order> findOrders(OrderSearch orderSearch){
-        return orderRepository.findAllByString(orderSearch);
+//        return orderRepository.findAllByString(orderSearch);
+        return orderRepository.findAll(orderSearch);
     }
 }
