@@ -1,41 +1,20 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
-// 자동으로 스프링 빈으로 등록.
-@Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+// T : 제네릭, 타입.
+// 스프링 데이터 JPA -> JpaRepository
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    // EntityManager 주입(injection).
-    // @PersistenceContext -> @Autowired -> @RequiredArgsConstructor , final로 수정가능.
-    private final EntityManager em;
 
-    public void save(Member member){
-        em.persist(member);
-    }
+    // findByName처럼 일반화하기 어려운 기능도 메서드의 이름으로 정확한 JPQL 쿼리를 실행한다.
+    // findByName -> select m from Member m where m.name = :name
+    // 개발자는 인터페이스만 만들어주면 되고, 구현체는 스프링 데이터 JPA가 애플리케이션 실행시점에 주입해준다.
+    //      - 생산성 높아짐. (JPA에 대해서 잘 이해를 하자!)
 
-    public Member findOne(Long id){
-        return em.find(Member.class, id);
-    }
-
-    // JPQL
-    public List<Member> findAll(){
-        // ctrl + alt + n
-        return em.createQuery("select m from Member m", Member.class).getResultList();
-    }
-
-    // :name ==> 파라미터 바인딩.
-    public List<Member> findByName(String name){
-        return em.createQuery("select m from Member m where m.name = :name", Member.class)
-                .setParameter("name", name)
-                .getResultList();
-    }
+    // 스프링, JPA , 스프링 데이터 JPA, QueryDSL(JPQL을 자바코드로 작성하게 해줌)R
+    List<Member> findByName(String name);
 }
